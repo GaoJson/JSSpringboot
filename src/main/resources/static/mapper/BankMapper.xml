@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.boot.mapper.BankDao">
+
+    <insert id="addBank">
+        INSERT INTO bank(name,code,logo,combo)
+        VALUES(
+        #{bank.name},
+        #{bank.code},
+        #{bank.logo},
+        #{bank.combo}
+        )
+    </insert>
+
+
+    <update id="updateBank">
+        UPDATE BANK
+        <set>
+            name = #{bank.name},
+            code = #{bank.code},
+            logo = #{bank.logo},
+            combo = #{bank.combo},
+            update_time = CURRENT_TIMESTAMP
+        </set>
+        <where>
+            id = #{bank.id}
+        </where>
+    </update>
+
+    <select id="searchBank" resultType="bank">
+        SELECT * FROM bank
+        <where>
+            name like concat('%',#{key},'%')
+        </where>
+    </select>
+
+    <select id="totalBank">
+        SELECT COUNT(id) from bank
+
+    </select>
+
+    <select id="allBank">
+        SELECT * from bank
+    </select>
+
+
+
+</mapper>

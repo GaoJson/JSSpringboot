@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "mybatis-3-mapper.dtd">
+<mapper namespace="com.example.boot.mapper.ProductDao">
+
+    <insert id="addProduct" parameterType="Product">
+        INSERT INTO product(product_name,product_id,product_banner,product_content,product_price,product_sale_price,product_img)
+        VALUES (
+        #{Product.product_name},
+        #{Product.product_id},
+        #{Product.product_banner},
+        #{Product.product_content},
+        #{Product.product_price},
+        #{Product.product_sale_price},
+        #{Product.product_img}
+        )
+    </insert>
+
+    <delete id="deleteProduct" >
+        DELETE FROM product
+        WHERE id=#{id}
+    </delete>
+
+    <update id="updateProduct">
+
+
+
+    </update>
+
+    <select id="getAllProduct" resultType="product">
+        SELECT * from product
+        Limit #{page},#{pageSize}
+    </select>
+
+    <select id="getAll" resultType="int">
+        SELECT COUNT(*) FROM product
+    </select>
+
+</mapper>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>产品信息</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <style>
+        .mainer {
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 20px;
+            height: 100%;
+            background-color: white;
+        }
+
+        .header{
+            display: inline-block;
+            height: 50px;
+            width: 100%;
+        }
+        .header h5 {
+            margin-left: 10px;
+            display: inline-block;
+        }
+        .header p {
+            color: gray;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .lines {
+            height: 1px;
+            width: 100%;
+            background-color: #f1f1f1;
+        }
+        .add-user {
+            margin-top: 20px;
+            height: 50px;
+        }
+
+        .user-list {
+
+        }
+
+    </style>
+
+</head>
+<body >
+<!--Thymeleaf 前端框架以 Html 为载体-->
+
+<div class=" mainer">
+
+    <div class="header">
+        <h5>产品列表</h5>
+        <p th:text="|(产品总数: ${allCount})|"></p>
+
+    </div>
+    <div class="lines"></div>
+    <div class="add-user">
+
+        <button type="button" class="btn btn-primary">添加用户</button>
+
+    </div>
+
+    <div class="user-list">
+
+        <table style="border: solid #dee2e6;border-width: 1px 0;" class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">产品名称</th>
+                <th scope="col">产品图标</th>
+                <th scope="col">产品ID</th>
+                <th scope="col">产品内容</th>
+                <th scope="col">原价</th>
+                <th scope="col">售价</th>
+                <th scope="col">创建时间</th>
+                <th scope="col">操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="model,index:${productList}">
+                <td  th:text="${model.id}"> </td>
+                <td style="font-size: 10px" th:text="${model.product_name}"> </td>
+                <td >
+                    <img style="width: 50px;height: 50px" th:src="${model.product_img}" alt="1"/>
+                </td>
+                <td th:text="${model.product_id}"> </td>
+                <td th:text="${model.product_id}"></td>
+                <td th:text="${model.product_price}"> </td>
+                <td th:text="${model.product_sale_price}"> </td>
+                <td th:text="${model.create_time}"> </td>
+                <td>
+                    <button  th:name="${model.id}" style="display: block;height: 25px;font-size: 10px;padding:0 8px 0 8px;" class="btn btn-primary btn-sm user-edit-btn">编辑</button>
+                    <button data-toggle="modal" data-target="#deleteModal" th:name="${model.id}" style="display: block;height: 25px;font-size: 10px;padding:0 8px 0 8px;margin-top: 3px" class="btn btn-danger btn-sm user-delete-btn">删除</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li th:each="pageUtil:${page}" th:classappend="${pageUtil.active}?'active':''"  class="page-item" >
+                    <a class="page-link " th:text="${pageUtil.pages}" >
+                    </a></li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">提示</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                是否删除该用户？？
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                <button id="modalDeleteUser"  type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    var delete_id = 0;
+    $(document).ready(function(){
+        $(".pagination").children("li").click(function(){
+            const page = $(this).children("a").text();
+            if (page === "上一页"){
+                let pages = getUrlParam("page");
+                pages--;
+                window.location.href = "/admin/product?page="+pages;
+            } else if(page === "下一页") {
+                let pages = getUrlParam("page");
+                pages++;
+                window.location.href = "/admin/product?page="+pages;
+            } else {
+                window.location.href = "/admin/product?page="+$(this).children("a").text();
+            }
+        });
+
+        $(".user-edit-btn").click(function (){
+            console.log($(this).attr("name"))
+
+        })
+        $(".user-delete-btn").click(function () {
+            delete_id = $(this).attr("name")
+        })
+
+        $("#modalDeleteUser").click(function () {
+            $.post("/admin/product/delete",{"id":delete_id},function(data,status){
+                window.location.href = "/admin/product?page="+getUrlParam("page");
+            })
+        })
+
+
+    });
+
+    function getUrlParam(name) {
+        //构造一个含有目标参数的正则表达式对象
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        //匹配目标参数
+        var r = window.location.search.substr(1).match(reg);
+        //返回参数值
+        if(r != null) {
+            return decodeURI(r[2]);
+        }
+        return null;
+    }
+
+
+
+</script>
+
+
+
+</body>
+</html>

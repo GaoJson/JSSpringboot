@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>注册</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <style>
+        .mainer {
+            margin-left: 10px;
+            margin-right: 10px;
+            margin-top: 20px;
+            height: 100%;
+            background-color: white;
+        }
+
+        .header{
+            display: inline-block;
+            height: 50px;
+            width: 100%;
+        }
+        .header h5 {
+            margin-left: 10px;
+            display: inline-block;
+        }
+        .header p {
+            color: gray;
+            font-size: 13px;
+            display: inline-block;
+        }
+        .lines {
+            height: 1px;
+            width: 100%;
+            background-color: #f1f1f1;
+        }
+        .add-user {
+            margin-top: 20px;
+            height: 50px;
+        }
+
+        .user-list {
+
+        }
+
+    </style>
+
+</head>
+<body >
+
+<div class=" mainer">
+
+    <div class="header">
+        <h5>会员列表</h5>
+        <p th:text="|(会员总人数: ${allCount})|"></p>
+
+    </div>
+    <div class="lines"></div>
+    <div class="add-user">
+
+        <button type="button" class="btn btn-primary">添加用户</button>
+
+    </div>
+
+    <div class="user-list">
+
+    <table style="border: solid #dee2e6;border-width: 1px 0;" class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">用户头像</th>
+                <th scope="col">用户昵称</th>
+                <th scope="col">真实姓名</th>
+                <th scope="col">创建时间</th>
+                <th scope="col">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user,index:${userList}">
+            <td th:text="${user.id}"> </td>
+            <td >
+                <img style="width: 50px;height: 50px" th:src="${user.img}" alt="1"/>
+            </td>
+            <td th:text="${user.username}"> </td>
+            <td th:text="${user.nickname}"> </td>
+            <td th:text="${user.create_time}"> </td>
+            <td>
+                <button data-toggle="modal" data-target="#editModal" th:index="${index.index}"  th:name="${user.id}" style="display: block;height: 25px;font-size: 10px;padding:0 8px 0 8px;" class="btn btn-primary btn-sm user-edit-btn">编辑</button>
+                <button data-toggle="modal" data-target="#deleteModal" th:index="${index.index}" th:name="${user.id}" style="display: block;height: 25px;font-size: 10px;padding:0 8px 0 8px;margin-top: 3px" class="btn btn-danger btn-sm user-delete-btn">删除</button>
+            </td>
+        </tr>
+        <script th:inline="javascript">
+            $(".user-edit-btn").click(function (){
+                delete_id = $(this).attr("name")
+                const  index = $(this).attr("index");
+                const data = [[${userList}]][index];
+                $("#inputUsername").val(data.username);
+                $("#inputNickname").val(data.nickname);
+                $("#inputImg").val(data.img);
+                $("#placeImage").attr("src",data.img);
+            })
+
+        </script>
+        </tbody>
+    </table>
+    </div>
+
+   <div>
+       <nav aria-label="Page navigation">
+           <ul class="pagination justify-content-center">
+               <li th:each="pageUtil:${page}" th:classappend="${pageUtil.active}?'active':''"  class="page-item" >
+                   <a class="page-link " th:text="${pageUtil.pages}" >
+                   </a></li>
+           </ul>
+       </nav>
+   </div>
+</div>
+
+
+<!-- Modal -->
+<div>
+    <div class="modal fade" id="deleteModal" tabindex="-4" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">提示</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    是否删除该用户？？
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button id="modalDeleteUser"  type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel1">修改用户信息</h1>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group row">
+                        <label for="inputUsername" class="col-sm-2 col-form-label">用户名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputUsername">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputNickname" class="col-sm-2 col-form-label">真实姓名</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputNickname">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="inputNickname" class="col-sm-2 col-form-label">图片信息</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputImg">
+                        </div>
+                        <img id="placeImage" style="width: 100px;height: 100px;margin-left: 20%;" src="" class=" rounded mx-auto d-block" alt="...">
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button id="modalEditUser"  type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    var delete_id = 0;
+    $(document).ready(function(){
+        $(".pagination").children("li").click(function(){
+            const page = $(this).children("a").text();
+            if (page === "上一页"){
+                let pages = getUrlParam("page");
+                pages--;
+                window.location.href = "/admin/user?page="+pages;
+           } else if(page === "下一页") {
+                let pages = getUrlParam("page");
+                pages++;
+                window.location.href = "/admin/user?page="+pages;
+           } else {
+               window.location.href = "/admin/user?page="+$(this).children("a").text();
+           }
+        });
+
+
+        $(".user-delete-btn").click(function () {
+            delete_id = $(this).attr("name")
+        })
+
+        $("#modalDeleteUser").click(function () {
+            $.post("/admin/user/delete",{"id":delete_id},function(data,status){
+                window.location.href = "/admin/user?page="+getUrlParam("page");
+            })
+        })
+
+        $("#modalEditUser").click(function () {
+            const params = {
+                "id":delete_id,
+                "username":$("#inputUsername").val(),
+                "nickname":$("#inputNickname").val(),
+                "img":$("#inputImg").val(),
+            }
+            $.post("/admin/user/update",params,function(data,status){
+                window.location.href = "/admin/user?page="+getUrlParam("page");
+            })
+        })
+
+
+        $("#inputImg").change(function (e) {
+            console.log($(this).val());
+            $("#placeImage").attr("src",$(this).val());
+        })
+
+        console.log(window.parent);
+
+
+    });
+
+    function getUrlParam(name) {
+        //构造一个含有目标参数的正则表达式对象
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        //匹配目标参数
+        var r = window.location.search.substr(1).match(reg);
+        //返回参数值
+        if(r != null) {
+            return decodeURI(r[2]);
+        }
+        return null;
+    }
+
+
+
+</script>
+
+</body>
+</html>

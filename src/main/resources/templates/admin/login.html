@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+        }
+        .body-back{
+            padding: 0;
+            height: 100vh;
+            min-width: 900px;
+            background-size: 100% 100%;
+            background: url("http://supply.chain.wo-shop.net/static/admin/img/bg-admin2.jpg");
+        }
+        .mainer{
+            padding-left: 10%;
+            padding-top: 6%;
+            width: 80%;
+            height: 74%;
+            margin-top: auto;
+            margin-bottom: auto;
+
+        }
+        .left-menu {
+            display: inline-block;
+            vertical-align: bottom;
+            position: relative;
+            height: 100%;
+            width: 50%;
+            background-image: linear-gradient(157deg, #0C1741 0%, #071232 96%);
+        }
+        .left-menu img {
+            bottom: 0;
+            position: absolute;
+            width: 100%;
+            height: auto;
+        }
+        .left-menu h1 {
+            color: white;
+            padding-top: 50px;
+            font-size: 30px;
+            font-weight: bold;
+            padding-left: 30px;
+        }
+        .left-menu p {
+            font-size: 12px;
+            color: #797f91;
+            letter-spacing: 4px;
+            padding-left: 30px;
+        }
+
+        .right-menu {
+            display: inline-block;
+            height: 100%;
+            width: 48%;
+            background-color: white;
+        }
+        .right-menu h2 {
+            margin-top: 30px;
+            padding-left: 15px;
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+            letter-spacing: 4px;
+        }
+        .right-menu p {
+            padding-bottom: 30px;
+            padding-left: 15px;
+            font-size: 13px;
+        }
+
+        .right-menu .form-data {
+            width: 80%;
+            background-color: #EDEFF5;
+            height: 40px;
+            border-radius: 10px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 20px;
+            position: relative;
+        }
+        .right-menu .form-data .icon {
+            height: 20px;
+            width: 20px;
+            margin-top: 10px;
+            margin-left: 5px;
+            position: absolute;
+            display: inline-block;
+        }
+        .right-menu .form-data input {
+            padding-left: 30px;
+            display: inline-block;
+            height: 100%;
+            width: 100%;
+            border: none;
+            outline: none;
+            background-color: transparent;
+        }
+
+
+        .right-menu .form-data .captcha {
+            height: 100%;
+            width: 100px;
+            position: absolute;
+            right: 0;
+            display: inline-block;
+        }
+
+        .right-menu .btn {
+            width: 80%;
+            height: 40px;
+            margin-left: 10%;
+            margin-top: 20px;
+        }
+        #tip {
+            color: red;
+            margin-left: 10%;
+            margin-top: 5px;
+            height: 20px;
+        }
+
+    </style>
+
+</head>
+<body >
+
+<div class="body-back">
+    <div  class="container mainer">
+        <div class="left-menu">
+            <h1>供应链商城系统</h1>
+            <p>Supply Chain Mall System</p>
+            <img alt="" src="http://supply.chain.wo-shop.net/static/admin/img/img-main.png" />
+        </div>
+
+        <div class="right-menu">
+            <h2>管理系统</h2>
+            <p>欢迎登录云仓供应链商城系统</p>
+
+            <div class="form-data">
+                <img class="icon" alt="" src="http://supply.chain.wo-shop.net/static/admin/img/icon-user.png">
+                <input id="username" autoComplete="off" placeholder="请输入账号">
+            </div>
+
+            <div class="form-data">
+                <img class="icon" alt="" src="http://supply.chain.wo-shop.net/static/admin/img/icon-password.png">
+                <input id="password" autoComplete="off" placeholder="请输入密码">
+            </div>
+            <div class="form-data">
+                <img class="icon" alt="" src="http://supply.chain.wo-shop.net/static/admin/img/icon-vertifaction.png">
+                <img id="captchaImg" alt="" class="captcha" src="/index/captcha" >
+                <input id="verifyCode" autoComplete="off" placeholder="请输入验证码">
+
+            </div>
+
+            <button id="loginBtn" class="btn btn-primary">登录</button>
+
+            <p id="tip"> </p>
+
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $("#captchaImg").click(function () {
+        $(this).attr("src","/index/captcha");
+    })
+
+    $("#loginBtn").click(function () {
+        $.post("/admin/api/login",
+            {"username":$("#username").val(), "password":$("#password").val(),
+                "verifyCode":$("#verifyCode").val(),
+            },function (data,status) {
+                const res = $.parseJSON(data);
+                const code = res["code"];
+                const msg = res["msg"];
+                if(code !== 200) {
+                    $("#tip").text("*"+msg).show(500)
+                    setTimeout(function () {
+                        $("#tip").hide(500);
+                    },2000)
+                } else {
+                    window.location.href = "/admin"
+                }
+            })
+
+    })
+
+
+</script>
+
+
+</body>
+</html>

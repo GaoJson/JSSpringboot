@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>银行卡</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+ <div style="width: 100%;max-width: 100%;text-align: center;" class="container">
+
+
+     <div style="text-align: center;display: inline-block;width: 150px;height: 100px;padding: 10px;"
+          th:each="index:${bankList}">
+        <img class="border" th:src="${index.combo}" alt="">
+         <p th:text="${index.name}"></p>
+     </div>
+ </div>
+</body>
+</html>
