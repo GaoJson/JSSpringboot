@@ -32,31 +32,18 @@ public class AjaxController {
     @Resource(name = "userService")
     UserService userService;
 
-
-
-
-
-
-
-
-
-
     @RequestMapping("index/captcha")
     public  void defaultCaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws IOException {
         httpServletResponse.setHeader("Cache-Control", "no-store");
         httpServletResponse.setHeader("Pragma", "no-cache");
         httpServletResponse.setDateHeader("Expires", 0);
         httpServletResponse.setContentType("image/gif");
-
         // 三个参数分别为宽、高、位数
         SpecCaptcha captcha = new SpecCaptcha(100, 40, 4);
-
         // 设置字体
         captcha.setCharType(Captcha.FONT_9);
-
         // 验证码存入session
         httpServletRequest.getSession().setAttribute("verifyCode", captcha.text().toLowerCase());
-
         // 输出图片流
         captcha.out(httpServletResponse.getOutputStream());
     }

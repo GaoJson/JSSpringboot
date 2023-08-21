@@ -5,6 +5,7 @@ import com.example.boot.pojo.User;
 import com.example.boot.service.BankService;
 import com.example.boot.service.UserService;
 import com.example.boot.tools.ApiResponse;
+import com.example.boot.tools.TokenTool;
 import com.example.boot.tools.Tools;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -45,6 +46,8 @@ public class LoginController {
 
         User user = userService.login(userName,password);
         if (user != null) {
+            String token = TokenTool.createToken(user);
+            System.out.println(token);
             httpServletRequest.getSession().setAttribute("admin_id",user.getId());
             httpServletRequest.getSession().setAttribute("admin_name",user.getUsername());
             return ApiResponse.response(200,"登录成功", JSON.toJSON(user));

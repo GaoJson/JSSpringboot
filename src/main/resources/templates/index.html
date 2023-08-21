@@ -2,105 +2,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>SpringBoot 集成 Thymeleaf</title>
-    <link href="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/5.1.1/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
-    <style>
-        .mainer{
-            position: fixed;
-            background-color: #f1f1f1;
-            width: 100%;
-            height: 100%;
-        }
-        .navbar {
-            top: 0;
-            position: fixed;
-            z-index: 999;
-            width: 100%;
-            background-color: #343a40;
-            height: 50px;
-        }
-        .left-menu {
-            top: 0;
-            position: fixed;
-            width: 100px;
-            height: 100%;
-            background-color: #343a40;
-            padding-top: 50px;
-        }
-        ul {
-            padding: 0;
-            width: 100%;
-        }
-        ul li {
-            text-align: center;
-            height: 40px;
-            list-style: none;
-            padding: 0;
-        }
-        li a {
-            height: 100%;
-            vertical-align: middle;
-            display: block;
-            text-decoration: none;
-            color: white;
-        }
-        li a span {
-            line-height: 40px;
-            vertical-align: middle;
-            height: 100%;
-            display: block;
-            color: white;
-        }
-        li a:link{
+    <title>首页</title>
 
-
-        }
-        li  .active{
-            background-color: #1992FC;
-            color: #fff;
-        }
-        .lines {
-            display: block;
-            height: 1px;
-            width: 100%;
-            background-color: #4d4d4d;
-        }
-
-    </style>
 
 
 </head>
-<body  style="height: 100vh" >
-<!--Thymeleaf 前端框架以 Html 为载体-->
-
-
-<div class="mainer">
-<div class="navbar">
-</div>
-<div  class="left-menu">
-<ul style="width:100%">
-    <li name="user">
-        <a class="active">
-            <span>用户信息</span>
-        </a>
-    </li>
-    <li name="product">
-        <a>
-            <span>商品信息</span>
-        </a>
-        <div class="lines"></div>
-    </li>
-
-</ul>
-</div>
-
-    <iframe style="z-index: 9999;width: 100%;height: 100%;padding-left: 100px;padding-top: 50px" src="/user?page=1" id="mainFrame">
-
-    </iframe>
-
-</div>
+<body >
 
 
 
@@ -109,41 +16,6 @@
 
 
 
-
-
-
-
-<!--    <div  style="width: 100%;text-align: center;height: 50px;background-color: white;">-->
-<!--        <div style="display: inline-block;width: 80%">首页</div>-->
-<!--        <a href="/register"  style="display: inline-block;" type="button" class="btn btn-primary">注册</a>-->
-<!--    </div>-->
-
-<!--    <div style="width: 100%;">-->
-<!--        <table class="table table-striped mx-auto">-->
-<!--           <tbody style="vertical-align: middle">-->
-<!--           <tr  th:each="model:${users}">-->
-<!--               <td >-->
-<!--                   <img style="width: 50px;height: 50px" th:src="${model.img}" alt="1"/>-->
-<!--               </td>-->
-<!--               <td th:text="${model.id}"> </td>-->
-<!--               <td th:text="${model.username}"> </td>-->
-<!--               <td th:text="${model.create_time}"> </td>-->
-<!--           </tr>-->
-<!--           </tbody>-->
-<!--        </table>-->
-<!--    </div>-->
-
-
-<script>
-    $(document).ready(function(){
-        $("li").click(function(){
-            console.log($(this).attr('name'))
-            $("li").children("a").removeClass("active");
-            $(this).children("a").addClass("active");
-            $("#mainFrame").attr("src","/login");
-        });
-    });
-</script>
 
 
 </body>
